@@ -53,6 +53,22 @@ class FMPDecorator():
         return _call_wrapper
 
     @classmethod
+    def format_statement_symbol_data(cls, func):
+        @functools.wraps(func)
+        def _call_wrapper(self, *args, **kwargs):
+            response = func(self, *args, **kwargs)
+            resp = response.json()
+            if self.output_format == 'json':
+                return resp
+            elif self.output_format == 'pandas':
+                return pd.DataFrame(resp)
+            else:
+                raise FMPException("Output must be either pandas or json",
+                                   FMPDecorator.format_historical_data.__name__)
+
+        return _call_wrapper
+
+    @classmethod
     def write_to_file(cls, func):
         @functools.wraps(func)
         def _call_wrapper(self, *args, **kwargs):

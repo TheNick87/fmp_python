@@ -83,5 +83,13 @@ class FMP(object):
         hp = self.__do_request__(rb.compile_request())
         return hp
 
+    @FMPDecorator.write_to_file
+    @FMPDecorator.format_statement_symbol_data
+    def get_financial_statement_symbol_list(self):
+        rb = RequestBuilder(self.api_key)
+        rb.set_category('financial-statement-symbol-lists')
+        result = self.__do_request__(rb.compile_request())
+        return result
+
     def __do_request__(self, url):
         return requests.get(url)
